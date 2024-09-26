@@ -6,3 +6,4 @@ langchain
 langchain_community
 langchain-core
 langchain-openai
+qdrant-client
