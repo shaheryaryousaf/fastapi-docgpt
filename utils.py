@@ -32,7 +32,7 @@ def process_pdf(pdf_path):
         chunk_overlap=40  # Adjust as needed
     )
     chunks = text_splitter.create_documents([document_text])
-    
+
     return chunks
 
 
@@ -75,9 +75,19 @@ def qa_ret(qdrant_store, input_query):
     """Retrieve relevant documents and generate a response from the AI model."""
     try:
         template = """
-        You are a helpful and dedicated assistant. Your primary role is to assist the user by providing accurate and thoughtful answers based on the given context.
+        You are an intelligent and professional assistant. Your primary task is to assist the user by providing accurate, concise, and relevant answers strictly based on the given context.
+
+        Instructions:
+        - Always base your answers on the provided context.
+        - If the user asks a question that is not covered by the context, politely apologize and inform the user that the information is not available. Suggest that they ask another question or rephrase the query.
+        - Avoid making assumptions or providing vague answers. If the answer is not explicitly available in the context, clearly state that the information cannot be found.
+
+        Context:
         {context}
-        **Question:** {question}
+
+        **User's Question:** {question}
+
+        Respond in a polite and professional tone.
         """
         prompt = ChatPromptTemplate.from_template(template)
         retriever = qdrant_store.as_retriever(
@@ -103,4 +113,3 @@ def qa_ret(qdrant_store, input_query):
 
     except Exception as ex:
         return f"Error: {str(ex)}"
-
