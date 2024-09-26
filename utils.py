@@ -90,8 +90,9 @@ def qa_ret(qdrant_store, input_query):
 
         model = ChatOpenAI(
             model_name="gpt-4o-mini",
-            temperature=0.3,
-            openai_api_key=OPENAI_API_KEY
+            temperature=0.7,
+            openai_api_key=OPENAI_API_KEY,
+            max_tokens=150
         )
 
         output_parser = StrOutputParser()
