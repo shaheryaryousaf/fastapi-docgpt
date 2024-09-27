@@ -8,3 +8,4 @@ langchain-core
 langchain-openai
 qdrant-client
 python-multipart
+pypdf
