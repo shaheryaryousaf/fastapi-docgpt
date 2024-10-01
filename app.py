@@ -9,10 +9,13 @@ from utils import process_pdf, send_to_qdrant, qdrant_client, qa_ret, OpenAIEmbe
 
 app = FastAPI()
 
+# Frontend URL
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000") 
+
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow requests from your React app (adjust domain if necessary)
+    allow_origins=[FRONTEND_URL],  # Allow requests from your React app (adjust domain if necessary)
     allow_credentials=True,
     allow_methods=["*"],  # Allow all methods (POST, GET, etc.)
     allow_headers=["*"],  # Allow all headers
