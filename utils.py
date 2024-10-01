@@ -75,19 +75,24 @@ def qa_ret(qdrant_store, input_query):
     """Retrieve relevant documents and generate a response from the AI model."""
     try:
         template = """
-        You are an intelligent and professional assistant. Your primary task is to assist the user by providing accurate, concise, and relevant answers strictly based on the given context.
-
         Instructions:
-        - Always base your answers on the provided context.
-        - If the user asks a question that is not covered by the context, politely apologize and inform the user that the information is not available. Suggest that they ask another question or rephrase the query.
-        - Avoid making assumptions or providing vague answers. If the answer is not explicitly available in the context, clearly state that the information cannot be found.
+            You are trained to extract answers from the given Context and the User's Question. Your response must be based on semantic understanding, which means even if the wording is not an exact match, infer the closest possible meaning from the Context. 
 
-        Context:
-        {context}
+            Key Points to Follow:
+            - **Precise Answer Length**: The answer must be between a minimum of 40 words and a maximum of 100 words.
+            - **Strict Answering Rules**: Do not include any unnecessary text. The answer should be concise and focused directly on the question.
+            - **Professional Language**: Do not use any abusive or prohibited language. Always respond in a polite and gentle tone.
+            - **No Personal Information Requests**: Do not ask for personal information from the user at any point.
+            - **Concise & Understandable**: Provide the most concise, clear, and understandable answer possible.
+            - **Semantic Similarity**: If exact wording isn’t available in the Context, use your semantic understanding to infer the answer. If there are semantically related phrases, use them to generate a precise response. Use natural language understanding to interpret closely related words or concepts.
+            - **Unavailable Information**: If the answer is genuinely not found in the Context, politely apologize and inform the user that the specific information is not available in the provided context.
 
-        **User's Question:** {question}
+            Context:
+            {context}
 
-        Respond in a polite and professional tone.
+            **User's Question:** {question}
+
+            Respond in a polite, professional, and concise manner.
         """
         prompt = ChatPromptTemplate.from_template(template)
         retriever = qdrant_store.as_retriever(
