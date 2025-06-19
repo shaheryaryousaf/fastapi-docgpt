@@ -9,3 +9,7 @@ langchain-openai
 qdrant-client
 python-multipart
 pypdf
+pydantic-settings
+slowapi
+pyjwt
+redis
