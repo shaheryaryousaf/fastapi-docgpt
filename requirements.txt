@@ -13,3 +13,5 @@ pydantic-settings
 slowapi
 pyjwt
 redis
+pytest
+httpx

@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # FastAPI application
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_API_KEY=${QDRANT_API_KEY:-}
+      - DEBUG=true
+    volumes:
+      - .:/app
+    depends_on:
+      - qdrant
+    restart: unless-stopped
+    networks:
+      - docgpt-network
+
+  # Qdrant vector database
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    restart: unless-stopped
+    networks:
+      - docgpt-network
+
+  # Redis for caching (optional)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - docgpt-network
+
+volumes:
+  qdrant_storage:
+  redis_data:
+
+networks:
+  docgpt-network:
+    driver: bridge 
